@@ -5,25 +5,32 @@ const favicon = require('serve-favicon');
 const app = express();
 const port = 3000;
 
-// Налаштування для обслуговування favicon
+// Favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-// Статичні файли
+// Static
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Використовуємо cookie-parser
+// Cookies
 app.use(cookieParser());
 
 // === PUG ===
 app.engine('pug', require('pug').__express);
-app.set('views', path.join(__dirname, 'views', 'pug')); // Папка для PUG шаблонів
+
+// Шлях до PUG шаблонів
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug'); // Основна view engine - PUG
 
 // === EJS ===
 app.engine('ejs', require('ejs').__express);
-app.set('views', path.join(__dirname, 'views', 'ejs')); // Папка для EJS шаблонів
 
+// Роутинг
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.render('pug/index'); // За замовчуванням PUG
+});
+
+app.get('/ejs', (req, res) => {
+  res.render('ejs/index.ejs'); // Рендер EJS
 });
 
 app.listen(port, () => {
